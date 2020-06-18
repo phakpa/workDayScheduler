@@ -16,7 +16,9 @@ let scheduleARR = [];
 //display current day/time
 currentDayEL.html(moment().format("dddd, MMMM Do YYYY"));
 
+//call functions to start site
 pastPresent();
+renderSchedule();
 
 //past, present, future text color displays
 function pastPresent() {
@@ -71,7 +73,26 @@ function pastPresent() {
   }
 }
 
-saveBtnEL.on("click", function () {
+//render schedule to browser
+function renderSchedule() {
+  let storedSchedule = JSON.parse(localStorage.getItem("schedules"));
+  if (storedSchedule !== null) {
+    scheduleARR = storedSchedule;
+
+    nineAMEL.text(storedSchedule[0]);
+    tenAMEL.text(storedSchedule[1]);
+    elevenAMEL.text(storedSchedule[2]);
+    twelvePMEL.text(storedSchedule[3]);
+    onePMEL.text(storedSchedule[4]);
+    twoPMEL.text(storedSchedule[5]);
+    threePMEL.text(storedSchedule[6]);
+    fourPMEL.text(storedSchedule[7]);
+    fivePMEL.text(storedSchedule[8]);
+  }
+}
+
+//Saving schedule input to local storage for the specific time of day event
+saveBtnEL.on("click", function (event) {
   let currentText = $(this).closest(".row").children(".col-md-10").val();
 
   if ($(this).closest(".row").children(".col-md-10").hasClass("9AM")) {
@@ -110,4 +131,10 @@ saveBtnEL.on("click", function () {
     scheduleARR[8] = currentText;
     localStorage.setItem("schedules", JSON.stringify(scheduleARR));
   }
+});
+
+//Clear day planner
+$(".clear").on("click", function () {
+  localStorage.removeItem("schedules");
+  window.location.reload();
 });
